@@ -9,7 +9,7 @@ export class Tokengenerate {
     private readonly configService: ConfigService
   ) { }
 
-  async generateToken(username: string, host: string) {
+  async generateToken(username: string, host: string, id:number) {
     const secretKey: string = this.configService.get<string>('secretKey')
 
     const duration_token_web: string = this.configService.get<string>('durationToken');//horas : minutos
@@ -29,6 +29,7 @@ export class Tokengenerate {
       iat: Math.round(date / 1000),
       nbf: Math.round(date / 1000),
       data: {
+        id: id, 
         login: username
       }
     }

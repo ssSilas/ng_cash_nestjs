@@ -27,7 +27,7 @@ export class UsersService {
   async findOneByUsername(username: string): Promise<UsersEntity> {
     try {
       const user = await this.userRepo.findOne({
-        attributes: ['username', 'password'],
+        attributes: ['id', 'username', 'password'],
         where: {
           username
         }
@@ -36,14 +36,6 @@ export class UsersService {
     } catch (error) {
       throw new NotFoundException(error.message);
     }
-  }
-
-  async userExist(username: string): Promise<UsersEntity> {
-    const user = await this.userRepo.findOne({
-      attributes: ['username', 'accountfk'],
-      where: { username }
-    })
-    return user
   }
 
   async create(username: string, password: string, accountfk: number) {

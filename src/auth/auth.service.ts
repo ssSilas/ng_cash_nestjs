@@ -4,6 +4,7 @@ import { UsersService } from 'src/users/users.service';
 import { loginDto } from 'src/dto/login.dto';
 import { Tokengenerate } from './strategies/token.service';
 import { AccountsService } from 'src/accounts/accounts.service';
+import { UsersEntity } from 'src/users/users.entity';
 
 @Injectable()
 export class AuthService {
@@ -18,18 +19,17 @@ export class AuthService {
       // hash the password
       const pass = await this.createHashPassword(user.password);
 
-      const userExist = await this.usersService.userExist(user.username)
+      const userExist : UsersEntity = await this.usersService.findOneByUsername(user.username)
       if (userExist) throw new HttpException('Username is already used, try another one :)', HttpStatus.BAD_REQUEST)
       
       const createAccount = await this.accountsService.initialCreate()
       // create the user
       const newUser = await this.usersService.create(user.username, pass, createAccount.id);
-
       // tslint:disable-next-line: no-string-literal
       const { password, ...result } = newUser['dataValues'];
 
       // generate token
-      const token = await this.tokenGenerate.generateToken(user.username, host);
+      const token = await this.tokenGenerate.generateToken(user.username, host, newUser.dataValues.id);
 
       // return the user and the token
       return { user: result, token }; 
@@ -39,7 +39,8 @@ export class AuthService {
   }
 
   async login(username: string, host: string) {
-    const response = await this.tokenGenerate.generateToken(username, host)
+    const getUser = await this.usersService.findOneByUsername(username)
+    const response = await this.tokenGenerate.generateToken(username, host, getUser.id)
     return { token: response }
   }
 

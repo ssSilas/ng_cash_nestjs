@@ -11,4 +11,8 @@ export class AccountsService {
   async initialCreate(){
     return (await this.accountsRepo.create({ balance:100 })).dataValues
   }
+
+  async getBalance(username : string){
+    return (await this.accountsRepo.create({ balance:100 })).dataValues
+  }
 }
