@@ -1,4 +1,5 @@
-import { Table, Column, DataType, Model} from "sequelize-typescript"
+import { Table, Column, DataType, Model, HasOne, BelongsTo} from "sequelize-typescript"
+import { AccountsEntity } from "src/accounts/accounts.entity"
 
 @Table({tableName:'users'})
 export class UsersEntity extends Model<UsersEntity> {
@@ -24,7 +25,10 @@ export class UsersEntity extends Model<UsersEntity> {
 
   @Column({
     allowNull:false,
-    type:DataType.INTEGER
+    type: DataType.INTEGER
   })
   accountfk: number
+  
+  @BelongsTo(() => AccountsEntity, {foreignKey: 'accountfk'} )
+  account: AccountsEntity
 }

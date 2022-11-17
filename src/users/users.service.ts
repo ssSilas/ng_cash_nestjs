@@ -1,4 +1,5 @@
-import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { AccountsEntity } from 'src/accounts/accounts.entity';
 import { UsersEntity } from 'src/users/users.entity';
 
 @Injectable()
@@ -28,9 +29,8 @@ export class UsersService {
     try {
       const user = await this.userRepo.findOne({
         attributes: ['id', 'username', 'password'],
-        where: {
-          username
-        }
+        where: { username },
+        include: { model: AccountsEntity }
       });
       return user
     } catch (error) {

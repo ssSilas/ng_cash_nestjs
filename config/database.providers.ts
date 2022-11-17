@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { Sequelize } from 'sequelize-typescript';
 import { AccountsEntity } from 'src/accounts/accounts.entity';
-import { Transactions } from 'src/transactions/transactions.entity';
+import { TransactionsEntity } from 'src/transactions/transactions.entity';
 import { UsersEntity } from 'src/users/users.entity';
 
 export const databaseProviders = [
@@ -20,7 +20,7 @@ export const databaseProviders = [
           timestamps:false
         }
       });
-      sequelize.addModels([UsersEntity, AccountsEntity, Transactions])
+      sequelize.addModels([UsersEntity, AccountsEntity, TransactionsEntity])
       await sequelize.sync()
       return sequelize
     }

@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Request, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Put, Query, Request, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
 import { AccountsService } from './accounts.service';
 
@@ -10,12 +10,24 @@ export class AccountsController {
 
   @Get('/balance')
   @UseGuards(JwtAuthGuard)
-  async findOne(@Query() query:{ username:string }, @Request() req : any) {
+  async balance(@Query() query:{ username:string }, @Request() req : {user : any}) {
     try {
-      console.log(req.user.data.login)
-      if(query.username != req.user.data.login) throw new UnauthorizedException('You do not have permission to access this balance');
+      if(query.username != req.user.data.login) 
+        throw new UnauthorizedException('You do not have permission to access this balance');
       
-      return true 
+      const getBalance = await this.accountsService.getBalance(query.username)
+      return `The current balance is: R$${ getBalance.balance }`
+    } catch (error) {
+      return error
+    }
+  }
+
+  @Put('/cash-out')
+  @UseGuards(JwtAuthGuard)
+  async cashOut(@Body() body:{ usernameIn:string, value:number }, @Request() req : any) {
+    try {
+      const usernameOut = req.user.data.login
+      return await this.accountsService.cashOut(usernameOut, body.usernameIn, body.value)
     } catch (error) {
       return error
     }
