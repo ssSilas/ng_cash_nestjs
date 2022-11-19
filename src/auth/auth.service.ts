@@ -18,7 +18,7 @@ export class AuthService {
     try {
       // hash the password
       const pass = await this.createHashPassword(user.password);
-
+      
       const userExist : UsersEntity = await this.usersService.findOneByUsername(user.username)
       if (userExist) throw new HttpException('Username is already used, try another one :)', HttpStatus.BAD_REQUEST)
       
@@ -26,10 +26,10 @@ export class AuthService {
       // create the user
       const newUser = await this.usersService.create(user.username, pass, createAccount.id);
       // tslint:disable-next-line: no-string-literal
-      const { password, ...result } = newUser['dataValues'];
+      const { password, ...result } = newUser;
 
       // generate token
-      const token = await this.tokenGenerate.generateToken(user.username, host, newUser.dataValues.id);
+      const token = await this.tokenGenerate.generateToken(user.username, host, newUser.id);
 
       // return the user and the token
       return { user: result, token }; 

@@ -40,7 +40,7 @@ export class UsersService {
 
   async create(username: string, password: string, accountfk: number) {
     const createUser = await this.userRepo.create({ username, password, accountfk })
-    return createUser
+    return createUser.dataValues
   }
 
   async login(username: string, password: string) {

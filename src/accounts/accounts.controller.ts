@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, Query, Request, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Put, Query, Request, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
 import { AccountsService } from './accounts.service';
 
@@ -27,6 +27,9 @@ export class AccountsController {
   async cashOut(@Body() body:{ usernameIn:string, value:number }, @Request() req : any) {
     try {
       const usernameOut = req.user.data.login
+      if (usernameOut == body.usernameIn) {
+        throw new HttpException('The transaction cannot be performed for yourself :)', HttpStatus.BAD_REQUEST)
+      }
       return await this.accountsService.cashOut(usernameOut, body.usernameIn, body.value)
     } catch (error) {
       return error

@@ -1,4 +1,4 @@
-import { Table, Column, DataType, Model, BelongsTo, HasOne } from "sequelize-typescript"
+import { Table, Column, DataType, Model, HasOne } from "sequelize-typescript"
 import { UsersEntity } from "src/users/users.entity"
 
 @Table({ tableName:'accounts' })
@@ -18,6 +18,6 @@ export class AccountsEntity extends Model<AccountsEntity> {
   })
   balance : number
 
-  @HasOne(() => UsersEntity, {foreignKey: 'id'} )
+  @HasOne(() => UsersEntity, { foreignKey: 'id' } )
   users: UsersEntity
 }

@@ -4,6 +4,7 @@ import dayjs from "dayjs"
 @Table({tableName:'transactions'})
 export class TransactionsEntity extends Model<TransactionsEntity> {
   @Column({
+    allowNull:false,
     autoIncrement:true,
     primaryKey:true,
     type:DataType.INTEGER

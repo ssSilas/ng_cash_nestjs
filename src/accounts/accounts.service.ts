@@ -17,7 +17,8 @@ export class AccountsService {
   ){}
 
   async initialCreate(){
-    return (await this.accountsRepo.create({ balance:100 })).dataValues
+    const createAccount = await this.accountsRepo.create({ balance:100 })
+    return createAccount.dataValues
   }
 
   async getBalance(username : string){
@@ -40,9 +41,8 @@ export class AccountsService {
 
     const subtract = balanceIn.balance + value
     const sum = balanceOut.balance - value
-
-    const updateOut = await this.updateAccount(balanceOut.id, subtract)
-    const updateIn = await this.updateAccount(balanceIn.id, sum)
+    await this.updateAccount(balanceOut.id, subtract)
+    await this.updateAccount(balanceIn.id, sum)
 
     const transactionOut = await this.transactionsService.addTransaction('out', balanceIn.id, sum)
     const transactionIn = await this.transactionsService.addTransaction('in', balanceOut.id, subtract)
