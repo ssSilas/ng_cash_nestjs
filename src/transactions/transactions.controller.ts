@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Query, Request, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Request, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
 import { TransactionsService } from './transactions.service';
 

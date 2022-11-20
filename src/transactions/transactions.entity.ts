@@ -1,6 +1,4 @@
 import { Table, Column, DataType, Model} from "sequelize-typescript"
-import dayjs from "dayjs"
-
 @Table({tableName:'transactions'})
 export class TransactionsEntity extends Model<TransactionsEntity> {
   @Column({
@@ -33,5 +31,5 @@ export class TransactionsEntity extends Model<TransactionsEntity> {
     allowNull:false,
     type:DataType.DATE
   })
-  createdAt: string = dayjs().format('YYYY-MM-DD HH:mm:ss')
+  createdAt: string 
 }

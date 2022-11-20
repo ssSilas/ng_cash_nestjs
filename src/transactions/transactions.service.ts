@@ -1,5 +1,7 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import dayjs from 'dayjs';
 import { Op } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
 import { UsersEntity } from 'src/users/users.entity';
 import { UsersService } from 'src/users/users.service';
 import { TransactionsEntity } from './transactions.entity';
@@ -18,7 +20,8 @@ export class TransactionsService {
       return await this.transactionsRepo.create({
         debitedAccountId: type != 'in' ? idAccount : null,
         creditedAccountId: type == 'in' ? idAccount : null,
-        value
+        value,
+        createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss')
       })
     } catch (error) {
       console.log(error)
@@ -41,7 +44,7 @@ export class TransactionsService {
 
       return getTransactions
     } catch (error) {
-      return error
+      console.log(error)
     }
   }
 
@@ -60,7 +63,7 @@ export class TransactionsService {
 
       return getTransactions
     } catch (error) {
-      return error
+      console.log(error)
     }
   }
 
@@ -73,7 +76,7 @@ export class TransactionsService {
             debitedAccountId: getUsers.account.id,
             creditedAccountId: getUsers.account.id
           },
-          createdAt: date
+          [Op.and]:[Sequelize.where(Sequelize.fn('date', Sequelize.col('createdAt')), '=', date)]
         }
       })
       if (!getTransactions.length)
